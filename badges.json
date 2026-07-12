@@ -1,9 +1,5 @@
 {
   "1026186749405306970": [
-    {
-      "id": "Dacing Cat",
-      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJcH7T9Gy2SL-j7sczXKQuPlhOkLNiXpdXAZDeGbAC4g&s=10",
-      "tooltip": "Just add a dancing cat why not."
-    }
+    { "id": "earthgif", "description": "Random Ass Earth Gif", "icon": "https://i.ibb.co/mCwPZnmN/earthgif.gif", "link": "#" }
   ]
 }
