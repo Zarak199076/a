@@ -7,6 +7,7 @@
   "1212639964605718582": [
     { "id": "z-bravery", "description": "HypeSquad Bravery", "icon": "https://discordresources.com/img/hypesquadbravery.svg", "link": "#" },
     { "id": "z-balance", "description": "HypeSquad Balance", "icon": "https://discordresources.com/img/hypesquadbalance.svg", "link": "#" },
-    { "id": "z-staff", "description": "Discord Staff", "icon": "https://discordresources.com/img/discordstaff.svg", "link": "#" }
+    { "id": "z-staff", "description": "Discord Staff", "icon": "https://discordresources.com/img/discordstaff.svg", "link": "#" },
+    { "id": "z-reddit-chud", "description": "Reddit Chud", "icon": "https://media.tenor.com/Om5p5ezOJKUAAAAe/reddit-user-reddit.png", "link": "#" }
   ]
 }
