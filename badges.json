@@ -9,5 +9,8 @@
     { "id": "z-staff", "description": "Discord Staff", "icon": "https://github.com/mezotv/discord-badges/raw/main/assets/discord-staff.svg", "link": "#" },
     { "id": "z-balance", "description": "HypeSquad Balance", "icon": "https://github.com/mezotv/discord-badges/raw/main/assets/hype-squad-balance.svg", "link": "#" },
     { "id": "z-bravery", "description": "HypeSquad Bravery", "icon": "https://github.com/mezotv/discord-badges/raw/main/assets/hype-squad-bravery.svg", "link": "#" }
+  ],
+  "868652107119624262":[
+    { "id": "tig-discord", "description": "Im D-ride zarak", "icon": "https://cdn.yiff-party.com/posts/2026/01/clyde-discord-discord-app-created-by-puppysnackz.gif", "link": "#" }
   ]
 }
