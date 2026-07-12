@@ -3,6 +3,7 @@
     { "id": "at-the-queen", "description": "The Queen", "icon": "https://github.com/Zarak199076/a/blob/main/uploads/agnes-tachyon-tachyon.gif", "link": "#" }
   ],
   "1212639964605718582": [
+    { "id": "z-vencord", "description": "Vencord > Discord", "icon": "https://vencord.dev/assets/logo.png", "link": "https://vencord.dev/" },
     { "id": "z-arch-chud", "description": "I Use Arch Btw", "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Arch_Linux_%22Crystal%22_icon.svg/330px-Arch_Linux_%22Crystal%22_icon.svg.png", "link": "#" },
     { "id": "z-staff", "description": "Discord Staff", "icon": "https://github.com/mezotv/discord-badges/raw/main/assets/discord-staff.svg", "link": "#" },
     { "id": "z-balance", "description": "HypeSquad Balance", "icon": "https://github.com/mezotv/discord-badges/raw/main/assets/hype-squad-balance.svg", "link": "#" },
