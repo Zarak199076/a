@@ -33,6 +33,12 @@
   ],
   "1212639964605718582": [
     {
+      "id": "veil-dev-0d88",
+      "description": "Developer Of Veil",
+      "icon": "https://raw.githubusercontent.com/Zarak199076/a/main/badges/veil-dev-0d88.png",
+      "link": "https://github.com/Zarak199076/Veil/"
+    },
+    {
       "id": "z-vencord",
       "description": "Vencord > Discord",
       "icon": "https://vencord.dev/assets/logo.png",
