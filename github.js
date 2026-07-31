@@ -43,7 +43,7 @@ async function addBadgeToUser(userId, badgeEntry) {
   const file = await getFile(config.badgesJsonPath);
   const data = file ? JSON.parse(file.content) : {};
   if (!Array.isArray(data[userId])) data[userId] = [];
-  data[userId].push(badgeEntry);
+  data[userId].unshift(badgeEntry);
   const updated = Buffer.from(JSON.stringify(data, null, 2), 'utf8');
   await putFile(
     config.badgesJsonPath,
