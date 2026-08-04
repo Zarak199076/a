@@ -57,21 +57,21 @@
       "link": "#"
     },
     {
-      "id": "z-balance",
-      "description": "HypeSquad Balance",
-      "icon": "https://github.com/mezotv/discord-badges/raw/main/assets/hype-squad-balance.svg",
-      "link": "#"
-    },
-    {
       "id": "hypesquad-events-3280",
       "description": "HypeSquad Events",
       "icon": "https://raw.githubusercontent.com/Zarak199076/a/main/badges/hypesquad-events-3280.png",
       "link": "#"
     },
     {
-      "id": "hypedbraveryroyal-f12f",
-      "description": "Royal HypeSquad Bravery",
+      "id": "hypedbalanceroyal-f12f",
+      "description": "Royal HypeSquad Balance",
       "icon": "https://raw.githubusercontent.com/Zarak199076/a/main/badges/hypedbraveryroyal-f12f.png",
+      "link": "#"
+    },
+    {
+      "id": "z-balance",
+      "description": "HypeSquad Balance",
+      "icon": "https://github.com/mezotv/discord-badges/raw/main/assets/hype-squad-balance.svg",
       "link": "#"
     },
     {
