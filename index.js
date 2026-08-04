@@ -13,9 +13,6 @@ const github = require('./github');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-// In-memory only. Pending submissions are lost if the bot restarts before review.
-const pendingBadges = new Map();
-
 function slugify(name) {
   return name
     .toLowerCase()
@@ -24,13 +21,27 @@ function slugify(name) {
     .slice(0, 32);
 }
 
-function extFromContentType(contentType) {
-  if (!contentType) return 'png';
-  if (contentType.includes('png')) return 'png';
-  if (contentType.includes('webp')) return 'webp';
-  if (contentType.includes('gif')) return 'gif';
-  if (contentType.includes('jpeg') || contentType.includes('jpg')) return 'jpg';
-  return 'png';
+function extFromUrl(url) {
+  const clean = url.split('?')[0];
+  const match = clean.match(/\.([a-zA-Z0-9]+)$/);
+  const ext = match ? match[1].toLowerCase() : 'png';
+  if (ext === 'jpeg') return 'jpg';
+  return ['png', 'webp', 'gif', 'jpg'].includes(ext) ? ext : 'png';
+}
+
+// Rebuilds submission data straight from the mod channel message/embed instead
+// of an in-memory store, so approvals still work after a Railway restart.
+function parseSubmissionFromMessage(message) {
+  const embed = message.embeds[0];
+  const fields = Object.fromEntries(embed.fields.map((f) => [f.name, f.value]));
+  const linkValue = fields['Link'];
+  return {
+    userId: fields['User ID'],
+    badgeId: fields['Badge ID'],
+    description: fields['Description'],
+    link: linkValue && linkValue !== 'None' ? linkValue : undefined,
+    attachmentUrl: embed.thumbnail.url,
+  };
 }
 
 client.once('ready', () => {
@@ -64,23 +75,14 @@ async function handleSubmit(interaction) {
     return interaction.reply({ content: 'Mod channel is not configured correctly. Contact an admin.', ephemeral: true });
   }
 
-  const submissionId = crypto.randomBytes(6).toString('hex');
-  const badgeId = `${slugify(name)}-${submissionId.slice(0, 4)}`;
-
-  pendingBadges.set(submissionId, {
-    userId: interaction.user.id,
-    badgeId,
-    description,
-    link,
-    attachmentUrl: attachment.url,
-    contentType: attachment.contentType,
-  });
+  const badgeId = `${slugify(name)}-${crypto.randomBytes(2).toString('hex')}`;
 
   const embed = new EmbedBuilder()
     .setTitle('New Badge Submission')
     .setThumbnail(attachment.url)
     .addFields(
-      { name: 'Submitter', value: `<@${interaction.user.id}> (${interaction.user.id})` },
+      { name: 'Submitter', value: `<@${interaction.user.id}>` },
+      { name: 'User ID', value: interaction.user.id },
       { name: 'Badge ID', value: badgeId },
       { name: 'Description', value: description },
       { name: 'Link', value: link || 'None' }
@@ -88,8 +90,8 @@ async function handleSubmit(interaction) {
     .setColor(0x5865f2);
 
   const row = new ActionRowBuilder().addComponents(
-    new ButtonBuilder().setCustomId(`badge_approve_${submissionId}`).setLabel('Approve').setStyle(ButtonStyle.Success),
-    new ButtonBuilder().setCustomId(`badge_deny_${submissionId}`).setLabel('Deny').setStyle(ButtonStyle.Danger)
+    new ButtonBuilder().setCustomId('badge_approve').setLabel('Approve').setStyle(ButtonStyle.Success),
+    new ButtonBuilder().setCustomId('badge_deny').setLabel('Deny').setStyle(ButtonStyle.Danger)
   );
 
   await modChannel.send({ embeds: [embed], components: [row] });
@@ -101,15 +103,8 @@ async function handleButton(interaction) {
     return interaction.reply({ content: 'You need Administrator permission to review badges.', ephemeral: true });
   }
 
-  const [, action, submissionId] = interaction.customId.split('_');
-  const submission = pendingBadges.get(submissionId);
-
-  if (!submission) {
-    return interaction.reply({
-      content: 'This submission is no longer pending (bot restarted or already handled).',
-      ephemeral: true,
-    });
-  }
+  const action = interaction.customId; // 'badge_approve' or 'badge_deny'
+  const submission = parseSubmissionFromMessage(interaction.message);
 
   await interaction.deferUpdate();
 
@@ -118,8 +113,7 @@ async function handleButton(interaction) {
     ButtonBuilder.from(interaction.message.components[0].components[1]).setDisabled(true)
   );
 
-  if (action === 'deny') {
-    pendingBadges.delete(submissionId);
+  if (action === 'badge_deny') {
     const embed = EmbedBuilder.from(interaction.message.embeds[0])
       .setColor(0xed4245)
       .addFields({ name: 'Status', value: `Denied by <@${interaction.user.id}>` });
@@ -130,7 +124,7 @@ async function handleButton(interaction) {
   try {
     const res = await fetch(submission.attachmentUrl);
     const buffer = Buffer.from(await res.arrayBuffer());
-    const ext = extFromContentType(submission.contentType);
+    const ext = extFromUrl(submission.attachmentUrl);
 
     const iconUrl = await github.uploadBadgeImage(submission.badgeId, ext, buffer);
     await github.addBadgeToUser(submission.userId, {
@@ -140,7 +134,6 @@ async function handleButton(interaction) {
       link: submission.link || '#',
     });
 
-    pendingBadges.delete(submissionId);
     const embed = EmbedBuilder.from(interaction.message.embeds[0])
       .setColor(0x57f287)
       .addFields({ name: 'Status', value: `Approved by <@${interaction.user.id}>` });
